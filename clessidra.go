@@ -5,13 +5,15 @@ import (
 )
 
 func main() {
+	clessidra(1, 0)
 	clessidra(3, 0)
+	clessidra(9, 0)
 }
 
 func clessidra(n, offset int) {
 	if n == 1 {
 		printBlanks(offset)
-		printStars((2 * n) - 1)
+		printStars(1)
 		return
 	}
 
