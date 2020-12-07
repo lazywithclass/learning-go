@@ -17,47 +17,32 @@ func main() {
 	defer file.Close()
 
 	var lines []string
+	var bagsContainingGolden = make(map[string]bool)
 
 	scanner := bufio.NewScanner(file)
-	var allBagsContainingGoldenShinyBags = make(map[string]bool)
-	var bagsThatCanContainGoldenShinyBags = make(map[string]bool)
-	
 	for scanner.Scan() {
 		line := scanner.Text()
 		lines = append(lines, line)
 		bagsNames := extractBagsNames(line)
-		found, name := maybeGetBagNameIfContainsGold(bagsNames)
-		if found {
-			bagsThatCanContainGoldenShinyBags[name] = true
+		for i, name := range bagsNames {
+			if name == "shiny gold" && i != 0 {
+				bagsContainingGolden[bagsNames[0]] = true
+			}
 		}
 	}
 
-	for _, line := range lines {
+	for i := 0; i < len(lines); i++ {
+		line := lines[i]
 		bagsNames := extractBagsNames(line)
-
-		entered := false
 		for _, name := range bagsNames {
-			if bagsThatCanContainGoldenShinyBags[name] {
-				entered = true
-				allBagsContainingGoldenShinyBags[bagsNames[0]] = true
-			}		
-		}
-
-		fmt.Println(bagsThatCanContainGoldenShinyBags)
-		fmt.Println(bagsNames, entered)
-		fmt.Println("--------------")
-	}
-
-	fmt.Println(len(allBagsContainingGoldenShinyBags))
-}
-
-func maybeGetBagNameIfContainsGold(bagNames []string) (found bool, bagName string) {
-	for i, name := range bagNames {
-		if name == "shiny gold" && i != 0 {
-			found = true
+			if bagsContainingGolden[name] && !bagsContainingGolden[bagsNames[0]] {
+				bagsContainingGolden[bagsNames[0]] = true
+				i = 0
+			}
 		}
 	}
-	return found, bagNames[0]
+
+	fmt.Println(len(bagsContainingGolden))
 }
 
 func extractBagsNames(line string) []string {
