@@ -25,6 +25,8 @@ import (
 
 func main() {
 	fmt.Println(isPalindromo("anna"))
+	fmt.Println(isPalindromo("annetta"))
+	fmt.Println(isPalindromo("432234"))
 }
 
 func isPalindromo(s string) bool {
